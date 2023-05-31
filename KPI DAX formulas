@@ -1,0 +1,57 @@
+/* Total Tickets per Day */
+Total Tickets = COUNT('Printful dataset'[tickets])
+-- This KPI measures the total number of tickets received each day. It's useful for understanding the volume of customer queries.
+
+/* Average Reply Time (min) */
+Average Reply Time = AVERAGE('Printful dataset'[first_reply_time_min])
+-- This KPI measures the average time it takes for a customer to receive the first reply. It's a critical metric in customer service, indicating the responsiveness of the team.
+
+/* Average Resolution Time (min) */
+Average Resolution Time = AVERAGE('Printful dataset'[full_resolution_min])
+-- This KPI measures the average time it takes to fully resolve a ticket. This can be used to asses how quickly the team can solve customer issues.
+
+/* Reopened Tickets Ratio */
+Reopened Tickets Ratio = DIVIDE(SUM('Printful dataset'[reopened_tickets]), SUM('Printful dataset'[tickets]))
+-- This KPI shows the proportion of tickets that had to be reopened, indicating potential issues in resolving customer problems on the first attempt.
+
+/* Agent Replies per Ticket */
+Agent Replies per Ticket = DIVIDE(SUM('Printful dataset'[agent_replies]), SUM('Printful dataset'[tickets]))
+-- This KPI indicates the average number of replies made by an agent per ticket. 
+
+/* First Contact Resolution Rate (FCR) */
+FCR = DIVIDE(
+    CALCULATE(
+        COUNT('Printful dataset'[tickets]),
+        'Printful dataset'[first_reply_time_min] = 'Printful dataset'[full_resolution_min]
+    ),
+    COUNT('Printful dataset'[tickets])
+)
+-- This KPI measures the proportion of tickets resolved in the first interaction, reflecting the efficiency and effectiveness of the customer support team.
+
+/* Customer Satisfaction Rate */
+Customer Satisfaction Rate = AVERAGE('Printful dataset'[satisfaction_score])
+-- This KPI measures the average customer satisfaction score. High satisfaction rates indicate effective and satisfactory customer support.
+
+/* Agent Utilization Rate */
+Agent Utilization Rate = DIVIDE(SUM('Printful dataset'[agent_replies]), COUNT('Printful dataset'[group_stations]))
+-- This KPI measures how much each agent is working in terms of replies sent. 
+
+/* Response Time SLA Compliance Rate */
+Response Time SLA Compliance Rate = DIVIDE(
+    CALCULATE(
+        COUNT('Printful dataset'[tickets]),
+        'Printful dataset'[first_reply_time_min] <= [SLA Reply Time]
+    ),
+    COUNT('Printful dataset'[tickets])
+)
+-- This KPI measures the proportion of tickets where the first response time was within the agreed SLA. 
+
+/* Resolution Time SLA Compliance Rate */
+Resolution Time SLA Compliance Rate = DIVIDE(
+    CALCULATE(
+        COUNT('Printful dataset'[tickets]),
+        'Printful dataset'[full_resolution_min] <= [SLA Resolution Time]
+    ),
+    COUNT('Printful dataset'[tickets])
+)
+-- This KPI measures the proportion of tickets resolved within the agreed SLA.
